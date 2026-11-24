@@ -39,7 +39,10 @@ const CANDIDATES = [
   ["Your estimate was honest; the calendar simply never read it.", 2, 2, 2, 1, 1],
   // A Friday deploy as an unread fortune: the cookie talks about itself,
   // and the pun carries the thought instead of decorating it.
-  ["A deploy on Friday is a fortune best left unread.", 2, 2, 2, 2, 2],
+  // SECOND PASS (re-judged): this is meta-commentary ABOUT a fortune, not
+  // a fortune itself — a punchline wearing a cookie's clothes. Criterion 1
+  // is the brief's most important test, so c1 drops to 1.
+  ["A deploy on Friday is a fortune best left unread.", 1, 2, 2, 2, 2],
   // The curse lands on its author: concrete, second-read sting.
   ["The legacy code you curse was written by someone in a hurry — you, last year.", 2, 1, 2, 2, 2],
   // Passing tests, moving bug: true and fresh, but reads more like a joke
@@ -48,6 +51,16 @@ const CANDIDATES = [
   // The reviewer as an unordered fortune: short and true, but the twist
   // is thin and the cookie voice is weak.
   ["The reviewer who asks 'why' is the fortune you did not order.", 2, 1, 2, 1, 1],
+  // --- SECOND PASS: three new challengers ---
+  // A "temp" name that outlives every plan: the smallest naming sin, and
+  // the one every dev recognises the moment they read it.
+  ["The function you called 'temp' will outlive every plan you make.", 2, 2, 2, 2, 2],
+  // A TODO comment whose deadline quietly arrived: the second read is the
+  // sting — "later" was never a date, and now it is one.
+  ["Somewhere, a comment you wrote says 'TODO: fix later' — later is now.", 2, 2, 2, 2, 2],
+  // Future-you debugging today's shortcut: true, but the future-self
+  // trope is well-worn and the sentence runs long for one breath.
+  ["Your future self is already debugging the shortcut you are about to take.", 2, 1, 2, 1, 1],
 ];
 
 function score(candidate) {
@@ -56,9 +69,9 @@ function score(candidate) {
 }
 
 function main() {
-  const ranked = CANDIDATES.map(([line]) => ({
-    line,
-    score: score(CANDIDATES.find((c) => c[0] === line)),
+  const ranked = CANDIDATES.map((candidate) => ({
+    line: candidate[0],
+    score: score(candidate),
   })).sort((a, b) => b.score - a.score || a.line.length - b.line.length);
 
   for (const entry of ranked) {
